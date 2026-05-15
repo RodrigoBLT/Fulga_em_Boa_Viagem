@@ -10,6 +10,7 @@
 #define JOGADOR_INICIO_X 360
 #define JOGADOR_INICIO_Y 520
 #define ID_TIMER_JOGO 1
+#define TAMANHO_RANKING 5
 
 typedef struct {
     int x;
@@ -31,9 +32,15 @@ typedef struct {
     Obstaculo *inicio;
 } ListaObstaculos;
 
+typedef struct {
+    int pontos;
+} Pontuacao;
+
 static Jogador jogador = {JOGADOR_INICIO_X, JOGADOR_INICIO_Y, 3, 0, 1};
 static ListaObstaculos listaObstaculos = {NULL};
+static Pontuacao ranking[TAMANHO_RANKING] = {{0}, {0}, {0}, {0}, {0}};
 static int jogoEncerrado = 0;
+static int pontuacaoRegistrada = 0;
 static const char NOME_CLASSE_JANELA[] = "FugaEmBoaViagemWindow";
 
 static void inicializarListaObstaculos(ListaObstaculos *lista) {
@@ -173,6 +180,7 @@ static void iniciarPartida(Jogador *jogadorAtual, ListaObstaculos *lista) {
     jogadorAtual->pontuacao = 0;
     jogadorAtual->dificuldade = 1;
     jogoEncerrado = 0;
+    pontuacaoRegistrada = 0;
 
     inicializarListaObstaculos(lista);
     inserirObstaculo(lista, criarObstaculo(120, 280, 4, 1));
@@ -195,6 +203,15 @@ static void avancarNivel(Jogador *jogadorAtual, ListaObstaculos *lista) {
 
     liberarListaObstaculos(lista);
     gerarObstaculoSeNecessario(lista, jogadorAtual);
+}
+
+static void registrarPontuacao(Pontuacao rankingAtual[], Jogador *jogadorAtual) {
+    if (pontuacaoRegistrada) {
+        return;
+    }
+
+    rankingAtual[TAMANHO_RANKING - 1].pontos = jogadorAtual->pontuacao;
+    pontuacaoRegistrada = 1;
 }
 
 static void desenharRetangulo(HDC hdc, int x, int y, int largura, int altura, COLORREF cor) {
@@ -366,6 +383,7 @@ static LRESULT CALLBACK processarMensagemJanela(HWND janela, UINT mensagem, WPAR
 
                 if (jogador.vidas <= 0) {
                     jogoEncerrado = 1;
+                    registrarPontuacao(ranking, &jogador);
                 }
             }
 
