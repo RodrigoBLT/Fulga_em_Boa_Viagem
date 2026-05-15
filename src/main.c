@@ -183,8 +183,7 @@ static void iniciarPartida(Jogador *jogadorAtual, ListaObstaculos *lista) {
     pontuacaoRegistrada = 0;
 
     inicializarListaObstaculos(lista);
-    inserirObstaculo(lista, criarObstaculo(120, 280, 4, 1));
-    inserirObstaculo(lista, criarObstaculo(520, 360, 5, -1));
+    gerarObstaculoSeNecessario(lista, jogadorAtual);
 }
 
 static void atualizarDificuldade(Jogador *jogadorAtual) {
