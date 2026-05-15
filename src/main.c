@@ -117,12 +117,20 @@ static void gerarObstaculoSeNecessario(ListaObstaculos *lista, Jogador *jogadorA
         return;
     }
 
-    int y = 280 + (rand() % 4) * TAMANHO_CELULA;
-    int direcao = (rand() % 2 == 0) ? 1 : -1;
-    int x = (direcao == 1) ? -TAMANHO_CELULA : LARGURA_JANELA;
-    int velocidade = 3 + jogadorAtual->dificuldade;
+    int quantidade = 2 + jogadorAtual->dificuldade;
 
-    inserirObstaculo(lista, criarObstaculo(x, y, velocidade, direcao));
+    if (quantidade > 10) {
+        quantidade = 10;
+    }
+
+    for (int i = 0; i < quantidade; i++) {
+        int y = 280 + (rand() % 4) * TAMANHO_CELULA;
+        int direcao = (rand() % 2 == 0) ? 1 : -1;
+        int x = (direcao == 1) ? -TAMANHO_CELULA - (i * 120) : LARGURA_JANELA + (i * 120);
+        int velocidade = 3 + jogadorAtual->dificuldade * 2;
+
+        inserirObstaculo(lista, criarObstaculo(x, y, velocidade, direcao));
+    }
 }
 
 static void liberarListaObstaculos(ListaObstaculos *lista) {
@@ -169,12 +177,21 @@ static void iniciarPartida(Jogador *jogadorAtual, ListaObstaculos *lista) {
 }
 
 static void atualizarDificuldade(Jogador *jogadorAtual) {
-    jogadorAtual->dificuldade = 1 + jogadorAtual->pontuacao / 100;
+    jogadorAtual->dificuldade++;
 }
 
 static void calcularPontuacao(Jogador *jogadorAtual) {
     jogadorAtual->pontuacao += 10;
+}
+
+static void avancarNivel(Jogador *jogadorAtual, ListaObstaculos *lista) {
+    jogadorAtual->pontuacao += 50;
     atualizarDificuldade(jogadorAtual);
+    jogadorAtual->x = JOGADOR_INICIO_X;
+    jogadorAtual->y = JOGADOR_INICIO_Y;
+
+    liberarListaObstaculos(lista);
+    gerarObstaculoSeNecessario(lista, jogadorAtual);
 }
 
 static void desenharRetangulo(HDC hdc, int x, int y, int largura, int altura, COLORREF cor) {
@@ -266,6 +283,7 @@ static void desenharTelaJogo(HWND janela) {
 static void moverJogador(HWND janela, int movimentoX, int movimentoY) {
     int novoX = jogador.x + movimentoX * TAMANHO_CELULA;
     int novoY = jogador.y + movimentoY * TAMANHO_CELULA;
+    int chegouAoFinal = movimentoY < 0 && novoY < 70;
 
     if (novoX >= 0 && novoX <= LARGURA_JANELA - TAMANHO_CELULA) {
         jogador.x = novoX;
@@ -277,6 +295,10 @@ static void moverJogador(HWND janela, int movimentoX, int movimentoY) {
 
     if (movimentoY < 0) {
         calcularPontuacao(&jogador);
+    }
+
+    if (chegouAoFinal) {
+        avancarNivel(&jogador, &listaObstaculos);
     }
 
     InvalidateRect(janela, NULL, TRUE);
