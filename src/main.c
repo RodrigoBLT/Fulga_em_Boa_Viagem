@@ -125,6 +125,15 @@ static void iniciarPartida(Jogador *jogadorAtual, ListaObstaculos *lista) {
     inserirObstaculo(lista, criarObstaculo(520, 360, 5, -1));
 }
 
+static void atualizarDificuldade(Jogador *jogadorAtual) {
+    jogadorAtual->dificuldade = 1 + jogadorAtual->pontuacao / 100;
+}
+
+static void calcularPontuacao(Jogador *jogadorAtual) {
+    jogadorAtual->pontuacao += 10;
+    atualizarDificuldade(jogadorAtual);
+}
+
 static void desenharRetangulo(HDC hdc, int x, int y, int largura, int altura, COLORREF cor) {
     HBRUSH pincel = CreateSolidBrush(cor);
     RECT area = {x, y, x + largura, y + altura};
@@ -224,8 +233,7 @@ static void moverJogador(HWND janela, int movimentoX, int movimentoY) {
     }
 
     if (movimentoY < 0) {
-        jogador.pontuacao += 10;
-        jogador.dificuldade = 1 + jogador.pontuacao / 100;
+        calcularPontuacao(&jogador);
     }
 
     InvalidateRect(janela, NULL, TRUE);
