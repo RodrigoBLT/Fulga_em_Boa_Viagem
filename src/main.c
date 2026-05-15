@@ -125,8 +125,9 @@ static void gerarObstaculoSeNecessario(ListaObstaculos *lista, Jogador *jogadorA
 
     for (int i = 0; i < quantidade; i++) {
         int y = 280 + (rand() % 4) * TAMANHO_CELULA;
-        int direcao = (rand() % 2 == 0) ? 1 : -1;
-        int x = (direcao == 1) ? -TAMANHO_CELULA - (i * 120) : LARGURA_JANELA + (i * 120);
+        int direcao = (i % 2 == 0) ? 1 : -1;
+        int espaco = LARGURA_JANELA / quantidade;
+        int x = i * espaco;
         int velocidade = 3 + jogadorAtual->dificuldade * 2;
 
         inserirObstaculo(lista, criarObstaculo(x, y, velocidade, direcao));
