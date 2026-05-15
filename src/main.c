@@ -205,12 +205,43 @@ static void avancarNivel(Jogador *jogadorAtual, ListaObstaculos *lista) {
     gerarObstaculoSeNecessario(lista, jogadorAtual);
 }
 
+static void trocarPontuacoes(Pontuacao *a, Pontuacao *b) {
+    Pontuacao temporaria = *a;
+    *a = *b;
+    *b = temporaria;
+}
+
+static int particionarRanking(Pontuacao rankingAtual[], int inicio, int fim) {
+    int pivo = rankingAtual[fim].pontos;
+    int indiceMenor = inicio - 1;
+
+    for (int i = inicio; i < fim; i++) {
+        if (rankingAtual[i].pontos > pivo) {
+            indiceMenor++;
+            trocarPontuacoes(&rankingAtual[indiceMenor], &rankingAtual[i]);
+        }
+    }
+
+    trocarPontuacoes(&rankingAtual[indiceMenor + 1], &rankingAtual[fim]);
+    return indiceMenor + 1;
+}
+
+static void quickSortRanking(Pontuacao rankingAtual[], int inicio, int fim) {
+    if (inicio < fim) {
+        int indicePivo = particionarRanking(rankingAtual, inicio, fim);
+
+        quickSortRanking(rankingAtual, inicio, indicePivo - 1);
+        quickSortRanking(rankingAtual, indicePivo + 1, fim);
+    }
+}
+
 static void registrarPontuacao(Pontuacao rankingAtual[], Jogador *jogadorAtual) {
     if (pontuacaoRegistrada) {
         return;
     }
 
     rankingAtual[TAMANHO_RANKING - 1].pontos = jogadorAtual->pontuacao;
+    quickSortRanking(rankingAtual, 0, TAMANHO_RANKING - 1);
     pontuacaoRegistrada = 1;
 }
 
