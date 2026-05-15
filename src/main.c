@@ -94,6 +94,18 @@ static void moverObstaculos(ListaObstaculos *lista) {
     }
 }
 
+static void liberarListaObstaculos(ListaObstaculos *lista) {
+    Obstaculo *atual = lista->inicio;
+
+    while (atual != NULL) {
+        Obstaculo *proximo = atual->proximo;
+        free(atual);
+        atual = proximo;
+    }
+
+    lista->inicio = NULL;
+}
+
 static int verificarColisao(ListaObstaculos *lista, Jogador *jogadorAtual) {
     Obstaculo *atual = lista->inicio;
 
@@ -283,6 +295,7 @@ static LRESULT CALLBACK processarMensagemJanela(HWND janela, UINT mensagem, WPAR
 
         case WM_DESTROY:
             KillTimer(janela, ID_TIMER_JOGO);
+            liberarListaObstaculos(&listaObstaculos);
             PostQuitMessage(0);
             return 0;
     }
