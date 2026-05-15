@@ -38,6 +38,10 @@ static void inicializarListaObstaculos(ListaObstaculos *lista) {
     lista->inicio = NULL;
 }
 
+static int listaObstaculosVazia(ListaObstaculos *lista) {
+    return lista->inicio == NULL;
+}
+
 static Obstaculo *criarObstaculo(int x, int y, int velocidade, int direcao) {
     Obstaculo *novoObstaculo = (Obstaculo *)malloc(sizeof(Obstaculo));
 
@@ -133,6 +137,10 @@ static void desenharJogador(HDC hdc) {
 }
 
 static void desenharObstaculos(HDC hdc, ListaObstaculos *lista) {
+    if (listaObstaculosVazia(lista)) {
+        return;
+    }
+
     Obstaculo *atual = lista->inicio;
 
     while (atual != NULL) {
