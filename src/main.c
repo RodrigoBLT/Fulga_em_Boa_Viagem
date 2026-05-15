@@ -94,6 +94,25 @@ static void moverObstaculos(ListaObstaculos *lista) {
     }
 }
 
+static int verificarColisao(ListaObstaculos *lista, Jogador *jogadorAtual) {
+    Obstaculo *atual = lista->inicio;
+
+    while (atual != NULL) {
+        int colideHorizontal = jogadorAtual->x < atual->x + TAMANHO_CELULA &&
+            jogadorAtual->x + TAMANHO_CELULA > atual->x;
+        int colideVertical = jogadorAtual->y < atual->y + TAMANHO_CELULA &&
+            jogadorAtual->y + TAMANHO_CELULA > atual->y;
+
+        if (colideHorizontal && colideVertical) {
+            return 1;
+        }
+
+        atual = atual->proximo;
+    }
+
+    return 0;
+}
+
 static void iniciarPartida(Jogador *jogadorAtual, ListaObstaculos *lista) {
     jogadorAtual->x = JOGADOR_INICIO_X;
     jogadorAtual->y = JOGADOR_INICIO_Y;
@@ -244,6 +263,13 @@ static LRESULT CALLBACK processarMensagemJanela(HWND janela, UINT mensagem, WPAR
 
         case WM_TIMER:
             moverObstaculos(&listaObstaculos);
+
+            if (verificarColisao(&listaObstaculos, &jogador)) {
+                jogador.vidas--;
+                jogador.x = JOGADOR_INICIO_X;
+                jogador.y = JOGADOR_INICIO_Y;
+            }
+
             InvalidateRect(janela, NULL, TRUE);
             return 0;
 
