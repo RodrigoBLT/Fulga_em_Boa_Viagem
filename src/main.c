@@ -54,6 +54,25 @@ static Obstaculo *criarObstaculo(int x, int y, int velocidade, int direcao) {
     return novoObstaculo;
 }
 
+static void inserirObstaculo(ListaObstaculos *lista, Obstaculo *novoObstaculo) {
+    if (novoObstaculo == NULL) {
+        return;
+    }
+
+    if (lista->inicio == NULL) {
+        lista->inicio = novoObstaculo;
+        return;
+    }
+
+    Obstaculo *atual = lista->inicio;
+
+    while (atual->proximo != NULL) {
+        atual = atual->proximo;
+    }
+
+    atual->proximo = novoObstaculo;
+}
+
 static void desenharRetangulo(HDC hdc, int x, int y, int largura, int altura, COLORREF cor) {
     HBRUSH pincel = CreateSolidBrush(cor);
     RECT area = {x, y, x + largura, y + altura};
