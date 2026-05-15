@@ -272,7 +272,8 @@ static void desenharHud(HDC hdc) {
 
     if (jogoEncerrado) {
         desenharTexto(hdc, 300, 260, "Fim de jogo", 36, RGB(160, 20, 30));
-        desenharTexto(hdc, 270, 300, "Pressione ESC para sair", 20, RGB(160, 20, 30));
+        desenharTexto(hdc, 250, 300, "Pressione R para reiniciar", 20, RGB(160, 20, 30));
+        desenharTexto(hdc, 300, 328, "ou ESC para sair", 18, RGB(160, 20, 30));
     }
 }
 
@@ -334,6 +335,13 @@ static LRESULT CALLBACK processarMensagemJanela(HWND janela, UINT mensagem, WPAR
                     break;
                 case VK_ESCAPE:
                     PostQuitMessage(0);
+                    break;
+                case 'R':
+                    if (jogoEncerrado) {
+                        liberarListaObstaculos(&listaObstaculos);
+                        iniciarPartida(&jogador, &listaObstaculos);
+                        InvalidateRect(janela, NULL, TRUE);
+                    }
                     break;
             }
             return 0;
