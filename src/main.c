@@ -325,6 +325,17 @@ static void desenharHud(HDC hdc) {
     }
 }
 
+static void exibirRanking(HDC hdc, Pontuacao rankingAtual[], int tamanho) {
+    char texto[64];
+
+    desenharTexto(hdc, 318, 365, "Ranking", 22, RGB(20, 70, 90));
+
+    for (int i = 0; i < tamanho; i++) {
+        snprintf(texto, sizeof(texto), "%d. %d pontos", i + 1, rankingAtual[i].pontos);
+        desenharTexto(hdc, 305, 395 + i * 24, texto, 18, RGB(20, 70, 90));
+    }
+}
+
 static void desenharTelaJogo(HWND janela) {
     PAINTSTRUCT pintura;
     HDC hdc = BeginPaint(janela, &pintura);
@@ -333,6 +344,10 @@ static void desenharTelaJogo(HWND janela) {
     desenharObstaculos(hdc, &listaObstaculos);
     desenharJogador(hdc);
     desenharHud(hdc);
+
+    if (jogoEncerrado) {
+        exibirRanking(hdc, ranking, TAMANHO_RANKING);
+    }
 
     EndPaint(janela, &pintura);
 }
