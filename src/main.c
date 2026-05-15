@@ -83,14 +83,32 @@ static void moverObstaculos(ListaObstaculos *lista) {
 
     while (atual != NULL) {
         atual->x += atual->velocidade * atual->direcao;
-
-        if (atual->x < -TAMANHO_CELULA) {
-            atual->x = LARGURA_JANELA;
-        } else if (atual->x > LARGURA_JANELA) {
-            atual->x = -TAMANHO_CELULA;
-        }
-
         atual = atual->proximo;
+    }
+}
+
+static void removerObstaculosForaDaTela(ListaObstaculos *lista) {
+    Obstaculo *atual = lista->inicio;
+    Obstaculo *anterior = NULL;
+
+    while (atual != NULL) {
+        int foraDaTela = atual->x < -TAMANHO_CELULA || atual->x > LARGURA_JANELA;
+
+        if (foraDaTela) {
+            Obstaculo *remover = atual;
+
+            if (anterior == NULL) {
+                lista->inicio = atual->proximo;
+            } else {
+                anterior->proximo = atual->proximo;
+            }
+
+            atual = atual->proximo;
+            free(remover);
+        } else {
+            anterior = atual;
+            atual = atual->proximo;
+        }
     }
 }
 
@@ -283,6 +301,7 @@ static LRESULT CALLBACK processarMensagemJanela(HWND janela, UINT mensagem, WPAR
 
         case WM_TIMER:
             moverObstaculos(&listaObstaculos);
+            removerObstaculosForaDaTela(&listaObstaculos);
 
             if (verificarColisao(&listaObstaculos, &jogador)) {
                 jogador.vidas--;
