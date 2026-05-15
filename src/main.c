@@ -112,6 +112,19 @@ static void removerObstaculosForaDaTela(ListaObstaculos *lista) {
     }
 }
 
+static void gerarObstaculoSeNecessario(ListaObstaculos *lista, Jogador *jogadorAtual) {
+    if (!listaObstaculosVazia(lista)) {
+        return;
+    }
+
+    int y = 280 + (rand() % 4) * TAMANHO_CELULA;
+    int direcao = (rand() % 2 == 0) ? 1 : -1;
+    int x = (direcao == 1) ? -TAMANHO_CELULA : LARGURA_JANELA;
+    int velocidade = 3 + jogadorAtual->dificuldade;
+
+    inserirObstaculo(lista, criarObstaculo(x, y, velocidade, direcao));
+}
+
 static void liberarListaObstaculos(ListaObstaculos *lista) {
     Obstaculo *atual = lista->inicio;
 
@@ -302,6 +315,7 @@ static LRESULT CALLBACK processarMensagemJanela(HWND janela, UINT mensagem, WPAR
         case WM_TIMER:
             moverObstaculos(&listaObstaculos);
             removerObstaculosForaDaTela(&listaObstaculos);
+            gerarObstaculoSeNecessario(&listaObstaculos, &jogador);
 
             if (verificarColisao(&listaObstaculos, &jogador)) {
                 jogador.vidas--;
