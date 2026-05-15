@@ -132,6 +132,16 @@ static void desenharJogador(HDC hdc) {
     );
 }
 
+static void desenharObstaculos(HDC hdc, ListaObstaculos *lista) {
+    Obstaculo *atual = lista->inicio;
+
+    while (atual != NULL) {
+        desenharRetangulo(hdc, atual->x, atual->y, TAMANHO_CELULA, TAMANHO_CELULA, RGB(45, 55, 65));
+        desenharTexto(hdc, atual->x + 8, atual->y + 8, "T", 20, RGB(255, 255, 255));
+        atual = atual->proximo;
+    }
+}
+
 static void desenharHud(HDC hdc) {
     char texto[128];
 
@@ -150,6 +160,7 @@ static void desenharTelaJogo(HWND janela) {
     HDC hdc = BeginPaint(janela, &pintura);
 
     desenharCenario(hdc);
+    desenharObstaculos(hdc, &listaObstaculos);
     desenharJogador(hdc);
     desenharHud(hdc);
 
