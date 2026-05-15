@@ -73,6 +73,18 @@ static void inserirObstaculo(ListaObstaculos *lista, Obstaculo *novoObstaculo) {
     atual->proximo = novoObstaculo;
 }
 
+static void iniciarPartida(Jogador *jogadorAtual, ListaObstaculos *lista) {
+    jogadorAtual->x = JOGADOR_INICIO_X;
+    jogadorAtual->y = JOGADOR_INICIO_Y;
+    jogadorAtual->vidas = 3;
+    jogadorAtual->pontuacao = 0;
+    jogadorAtual->dificuldade = 1;
+
+    inicializarListaObstaculos(lista);
+    inserirObstaculo(lista, criarObstaculo(120, 280, 4, 1));
+    inserirObstaculo(lista, criarObstaculo(520, 360, 5, -1));
+}
+
 static void desenharRetangulo(HDC hdc, int x, int y, int largura, int altura, COLORREF cor) {
     HBRUSH pincel = CreateSolidBrush(cor);
     RECT area = {x, y, x + largura, y + altura};
@@ -206,7 +218,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     (void)hPrevInstance;
     (void)lpCmdLine;
 
-    inicializarListaObstaculos(&listaObstaculos);
+    iniciarPartida(&jogador, &listaObstaculos);
 
     WNDCLASSA classeJanela = {0};
     classeJanela.lpfnWndProc = processarMensagemJanela;
