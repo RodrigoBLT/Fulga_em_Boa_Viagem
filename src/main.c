@@ -17,8 +17,25 @@ typedef struct {
     int dificuldade;
 } Jogador;
 
+typedef struct Obstaculo {
+    int x;
+    int y;
+    int velocidade;
+    int direcao;
+    struct Obstaculo *proximo;
+} Obstaculo;
+
+typedef struct {
+    Obstaculo *inicio;
+} ListaObstaculos;
+
 static Jogador jogador = {JOGADOR_INICIO_X, JOGADOR_INICIO_Y, 3, 0, 1};
+static ListaObstaculos listaObstaculos = {NULL};
 static const char NOME_CLASSE_JANELA[] = "FugaEmBoaViagemWindow";
+
+static void inicializarListaObstaculos(ListaObstaculos *lista) {
+    lista->inicio = NULL;
+}
 
 static void desenharRetangulo(HDC hdc, int x, int y, int largura, int altura, COLORREF cor) {
     HBRUSH pincel = CreateSolidBrush(cor);
@@ -152,6 +169,8 @@ static LRESULT CALLBACK processarMensagemJanela(HWND janela, UINT mensagem, WPAR
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
     (void)hPrevInstance;
     (void)lpCmdLine;
+
+    inicializarListaObstaculos(&listaObstaculos);
 
     WNDCLASSA classeJanela = {0};
     classeJanela.lpfnWndProc = processarMensagemJanela;
