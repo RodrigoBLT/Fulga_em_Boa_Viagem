@@ -9,6 +9,7 @@
 #define TAMANHO_JOGADOR 28
 #define JOGADOR_INICIO_X 360
 #define JOGADOR_INICIO_Y 520
+#define ID_TIMER_JOGO 1
 
 typedef struct {
     int x;
@@ -75,6 +76,22 @@ static void inserirObstaculo(ListaObstaculos *lista, Obstaculo *novoObstaculo) {
     }
 
     atual->proximo = novoObstaculo;
+}
+
+static void moverObstaculos(ListaObstaculos *lista) {
+    Obstaculo *atual = lista->inicio;
+
+    while (atual != NULL) {
+        atual->x += atual->velocidade * atual->direcao;
+
+        if (atual->x < -TAMANHO_CELULA) {
+            atual->x = LARGURA_JANELA;
+        } else if (atual->x > LARGURA_JANELA) {
+            atual->x = -TAMANHO_CELULA;
+        }
+
+        atual = atual->proximo;
+    }
 }
 
 static void iniciarPartida(Jogador *jogadorAtual, ListaObstaculos *lista) {
@@ -225,7 +242,13 @@ static LRESULT CALLBACK processarMensagemJanela(HWND janela, UINT mensagem, WPAR
             desenharTelaJogo(janela);
             return 0;
 
+        case WM_TIMER:
+            moverObstaculos(&listaObstaculos);
+            InvalidateRect(janela, NULL, TRUE);
+            return 0;
+
         case WM_DESTROY:
+            KillTimer(janela, ID_TIMER_JOGO);
             PostQuitMessage(0);
             return 0;
     }
@@ -273,6 +296,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
     ShowWindow(janela, nCmdShow);
     UpdateWindow(janela);
+    SetTimer(janela, ID_TIMER_JOGO, 40, NULL);
 
     MSG mensagem;
     while (GetMessage(&mensagem, NULL, 0, 0) > 0) {
