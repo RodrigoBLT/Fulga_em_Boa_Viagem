@@ -1,5 +1,6 @@
 #include <windows.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #define LARGURA_JANELA 800
@@ -35,6 +36,22 @@ static const char NOME_CLASSE_JANELA[] = "FugaEmBoaViagemWindow";
 
 static void inicializarListaObstaculos(ListaObstaculos *lista) {
     lista->inicio = NULL;
+}
+
+static Obstaculo *criarObstaculo(int x, int y, int velocidade, int direcao) {
+    Obstaculo *novoObstaculo = (Obstaculo *)malloc(sizeof(Obstaculo));
+
+    if (novoObstaculo == NULL) {
+        return NULL;
+    }
+
+    novoObstaculo->x = x;
+    novoObstaculo->y = y;
+    novoObstaculo->velocidade = velocidade;
+    novoObstaculo->direcao = direcao;
+    novoObstaculo->proximo = NULL;
+
+    return novoObstaculo;
 }
 
 static void desenharRetangulo(HDC hdc, int x, int y, int largura, int altura, COLORREF cor) {
