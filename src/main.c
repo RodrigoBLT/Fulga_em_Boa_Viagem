@@ -33,6 +33,7 @@ typedef struct {
 
 static Jogador jogador = {JOGADOR_INICIO_X, JOGADOR_INICIO_Y, 3, 0, 1};
 static ListaObstaculos listaObstaculos = {NULL};
+static int jogoEncerrado = 0;
 static const char NOME_CLASSE_JANELA[] = "FugaEmBoaViagemWindow";
 
 static void inicializarListaObstaculos(ListaObstaculos *lista) {
@@ -171,6 +172,7 @@ static void iniciarPartida(Jogador *jogadorAtual, ListaObstaculos *lista) {
     jogadorAtual->vidas = 3;
     jogadorAtual->pontuacao = 0;
     jogadorAtual->dificuldade = 1;
+    jogoEncerrado = 0;
 
     inicializarListaObstaculos(lista);
     inserirObstaculo(lista, criarObstaculo(120, 280, 4, 1));
@@ -267,6 +269,11 @@ static void desenharHud(HDC hdc) {
 
     snprintf(texto, sizeof(texto), "Nivel: %d", jogador.dificuldade);
     desenharTexto(hdc, 620, 62, texto, 18, RGB(20, 70, 90));
+
+    if (jogoEncerrado) {
+        desenharTexto(hdc, 300, 260, "Fim de jogo", 36, RGB(160, 20, 30));
+        desenharTexto(hdc, 270, 300, "Pressione ESC para sair", 20, RGB(160, 20, 30));
+    }
 }
 
 static void desenharTelaJogo(HWND janela) {
@@ -336,6 +343,10 @@ static LRESULT CALLBACK processarMensagemJanela(HWND janela, UINT mensagem, WPAR
             return 0;
 
         case WM_TIMER:
+            if (jogoEncerrado) {
+                return 0;
+            }
+
             moverObstaculos(&listaObstaculos);
             removerObstaculosForaDaTela(&listaObstaculos);
             gerarObstaculoSeNecessario(&listaObstaculos, &jogador);
@@ -344,6 +355,10 @@ static LRESULT CALLBACK processarMensagemJanela(HWND janela, UINT mensagem, WPAR
                 jogador.vidas--;
                 jogador.x = JOGADOR_INICIO_X;
                 jogador.y = JOGADOR_INICIO_Y;
+
+                if (jogador.vidas <= 0) {
+                    jogoEncerrado = 1;
+                }
             }
 
             InvalidateRect(janela, NULL, TRUE);
