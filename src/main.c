@@ -72,10 +72,10 @@ static void removerObstaculosForaDaTela(ListaObstaculos *lista) {
     while (atual != NULL) {
         if (atual->x < -TAMANHO_CELULA) {
             atual->x = LARGURA_JANELA + (rand() % 120);
-            atual->y = 280 + (rand() % 4) * TAMANHO_CELULA;
+            atual->y = INICIO_MAR + (rand() % QUANTIDADE_FAIXAS_TUBARAO) * TAMANHO_CELULA;
         } else if (atual->x > LARGURA_JANELA) {
             atual->x = -TAMANHO_CELULA - (rand() % 120);
-            atual->y = 280 + (rand() % 4) * TAMANHO_CELULA;
+            atual->y = INICIO_MAR + (rand() % QUANTIDADE_FAIXAS_TUBARAO) * TAMANHO_CELULA;
         }
 
         atual = atual->proximo;
@@ -94,7 +94,7 @@ static void gerarObstaculoSeNecessario(ListaObstaculos *lista, Jogador *jogadorA
     }
 
     for (int i = 0; i < quantidade; i++) {
-        int y = 280 + (rand() % 4) * TAMANHO_CELULA;
+        int y = INICIO_MAR + (rand() % QUANTIDADE_FAIXAS_TUBARAO) * TAMANHO_CELULA;
         int direcao = (i % 2 == 0) ? 1 : -1;
         int espaco = LARGURA_JANELA / quantidade;
         int x = i * espaco;
@@ -254,12 +254,12 @@ static void desenharTexto(HDC hdc, int x, int y, const char *texto, int tamanho,
 }
 
 static void desenharCenario(HDC hdc) {
-    desenharRetangulo(hdc, 0, 0, LARGURA_JANELA, 70, RGB(135, 206, 235));
-    desenharRetangulo(hdc, 0, 70, LARGURA_JANELA, 250, RGB(238, 203, 145));
-    desenharRetangulo(hdc, 0, 250, LARGURA_JANELA, 350, RGB(35, 150, 190));
+    desenharRetangulo(hdc, 0, 0, LARGURA_JANELA, INICIO_AREIA, RGB(135, 206, 235));
+    desenharRetangulo(hdc, 0, INICIO_AREIA, LARGURA_JANELA, INICIO_MAR - INICIO_AREIA, RGB(238, 203, 145));
+    desenharRetangulo(hdc, 0, INICIO_MAR, LARGURA_JANELA, ALTURA_JANELA - INICIO_MAR, RGB(35, 150, 190));
 
-    for (int y = 70; y < ALTURA_JANELA; y += TAMANHO_CELULA) {
-        COLORREF linha = (y < 250) ? RGB(224, 185, 125) : RGB(80, 190, 210);
+    for (int y = INICIO_AREIA; y < ALTURA_JANELA; y += TAMANHO_CELULA) {
+        COLORREF linha = (y < INICIO_MAR) ? RGB(224, 185, 125) : RGB(80, 190, 210);
         desenharRetangulo(hdc, 0, y, LARGURA_JANELA, 2, linha);
     }
 
@@ -372,13 +372,13 @@ static void desenharTelaJogo(HWND janela) {
 static void moverJogador(HWND janela, int movimentoX, int movimentoY) {
     int novoX = jogador.x + movimentoX * TAMANHO_CELULA;
     int novoY = jogador.y + movimentoY * TAMANHO_CELULA;
-    int chegouAoFinal = movimentoY < 0 && novoY < 70;
+    int chegouAoFinal = movimentoY < 0 && novoY < INICIO_AREIA;
 
     if (novoX >= 0 && novoX <= LARGURA_JANELA - TAMANHO_CELULA) {
         jogador.x = novoX;
     }
 
-    if (novoY >= 70 && novoY <= ALTURA_JANELA - TAMANHO_CELULA) {
+    if (novoY >= INICIO_AREIA && novoY <= ALTURA_JANELA - TAMANHO_CELULA) {
         jogador.y = novoY;
     }
 

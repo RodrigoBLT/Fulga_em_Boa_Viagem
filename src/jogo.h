@@ -5,6 +5,9 @@
 #define ALTURA_JANELA 600
 #define TAMANHO_CELULA 40
 #define TAMANHO_JOGADOR 28
+#define INICIO_AREIA 70
+#define INICIO_MAR 190
+#define QUANTIDADE_FAIXAS_TUBARAO 8
 #define JOGADOR_INICIO_X 360
 #define JOGADOR_INICIO_Y 520
 #define ID_TIMER_JOGO 1
@@ -35,4 +38,3 @@ typedef struct {
 } Pontuacao;
 
 #endif
-
