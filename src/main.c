@@ -382,19 +382,27 @@ static LRESULT CALLBACK processarMensagemJanela(HWND janela, UINT mensagem, WPAR
             switch (tecla) {
                 case VK_LEFT:
                 case 'A':
-                    moverJogador(janela, -1, 0);
+                    if (!jogoEncerrado) {
+                        moverJogador(janela, -1, 0);
+                    }
                     break;
                 case VK_RIGHT:
                 case 'D':
-                    moverJogador(janela, 1, 0);
+                    if (!jogoEncerrado) {
+                        moverJogador(janela, 1, 0);
+                    }
                     break;
                 case VK_UP:
                 case 'W':
-                    moverJogador(janela, 0, -1);
+                    if (!jogoEncerrado) {
+                        moverJogador(janela, 0, -1);
+                    }
                     break;
                 case VK_DOWN:
                 case 'S':
-                    moverJogador(janela, 0, 1);
+                    if (!jogoEncerrado) {
+                        moverJogador(janela, 0, 1);
+                    }
                     break;
                 case VK_ESCAPE:
                     PostQuitMessage(0);
