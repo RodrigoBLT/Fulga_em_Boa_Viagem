@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 #define LARGURA_JANELA 800
 #define ALTURA_JANELA 600
@@ -449,6 +450,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     (void)hPrevInstance;
     (void)lpCmdLine;
 
+    srand((unsigned int)time(NULL));
     iniciarPartida(&jogador, &listaObstaculos);
 
     WNDCLASSA classeJanela = {0};
