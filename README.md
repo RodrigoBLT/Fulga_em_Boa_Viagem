@@ -21,6 +21,7 @@ mingw32-make run
 
 ## Controles
 
+- Enter: iniciar a partida na tela inicial
 - Setas ou WASD: mover o jogador
 - R: reiniciar a partida apos o fim de jogo
 - Esc: sair
