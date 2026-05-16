@@ -9,6 +9,7 @@
 static Jogador jogador = {JOGADOR_INICIO_X, JOGADOR_INICIO_Y, 3, 0, 1};
 static ListaObstaculos listaObstaculos = {NULL};
 static Pontuacao ranking[TAMANHO_RANKING] = {{0}, {0}, {0}, {0}, {0}};
+static int jogoIniciado = 0;
 static int jogoEncerrado = 0;
 static int pontuacaoRegistrada = 0;
 static const char NOME_CLASSE_JANELA[] = "FugaEmBoaViagemWindow";
@@ -149,6 +150,7 @@ static void iniciarPartida(Jogador *jogadorAtual, ListaObstaculos *lista) {
     jogadorAtual->vidas = 3;
     jogadorAtual->pontuacao = 0;
     jogadorAtual->dificuldade = 1;
+    jogoIniciado = 1;
     jogoEncerrado = 0;
     pontuacaoRegistrada = 0;
 
@@ -346,11 +348,25 @@ static void exibirRanking(HDC hdc, Pontuacao rankingAtual[], int tamanho) {
     }
 }
 
+static void exibirMenu(HDC hdc) {
+    desenharTexto(hdc, 235, 190, "Fuga em Boa Viagem", 34, RGB(20, 70, 90));
+    desenharTexto(hdc, 210, 245, "Atravesse a praia e desvie dos tubaroes", 20, RGB(20, 70, 90));
+    desenharTexto(hdc, 275, 310, "Pressione ENTER para jogar", 20, RGB(160, 20, 30));
+    desenharTexto(hdc, 310, 340, "Use WASD ou setas", 18, RGB(20, 70, 90));
+}
+
 static void desenharTelaJogo(HWND janela) {
     PAINTSTRUCT pintura;
     HDC hdc = BeginPaint(janela, &pintura);
 
     desenharCenario(hdc);
+
+    if (!jogoIniciado) {
+        exibirMenu(hdc);
+        EndPaint(janela, &pintura);
+        return;
+    }
+
     desenharObstaculos(hdc, &listaObstaculos);
     desenharJogador(hdc);
     desenharHud(hdc);
@@ -390,27 +406,33 @@ static LRESULT CALLBACK processarMensagemJanela(HWND janela, UINT mensagem, WPAR
     switch (mensagem) {
         case WM_KEYDOWN:
             switch (tecla) {
+                case VK_RETURN:
+                    if (!jogoIniciado) {
+                        iniciarPartida(&jogador, &listaObstaculos);
+                        InvalidateRect(janela, NULL, TRUE);
+                    }
+                    break;
                 case VK_LEFT:
                 case 'A':
-                    if (!jogoEncerrado) {
+                    if (jogoIniciado && !jogoEncerrado) {
                         moverJogador(janela, -1, 0);
                     }
                     break;
                 case VK_RIGHT:
                 case 'D':
-                    if (!jogoEncerrado) {
+                    if (jogoIniciado && !jogoEncerrado) {
                         moverJogador(janela, 1, 0);
                     }
                     break;
                 case VK_UP:
                 case 'W':
-                    if (!jogoEncerrado) {
+                    if (jogoIniciado && !jogoEncerrado) {
                         moverJogador(janela, 0, -1);
                     }
                     break;
                 case VK_DOWN:
                 case 'S':
-                    if (!jogoEncerrado) {
+                    if (jogoIniciado && !jogoEncerrado) {
                         moverJogador(janela, 0, 1);
                     }
                     break;
@@ -432,7 +454,7 @@ static LRESULT CALLBACK processarMensagemJanela(HWND janela, UINT mensagem, WPAR
             return 0;
 
         case WM_TIMER:
-            if (jogoEncerrado) {
+            if (!jogoIniciado || jogoEncerrado) {
                 return 0;
             }
 
@@ -469,7 +491,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     (void)lpCmdLine;
 
     srand((unsigned int)time(NULL));
-    iniciarPartida(&jogador, &listaObstaculos);
+    inicializarListaObstaculos(&listaObstaculos);
 
     WNDCLASSA classeJanela = {0};
     classeJanela.lpfnWndProc = processarMensagemJanela;
