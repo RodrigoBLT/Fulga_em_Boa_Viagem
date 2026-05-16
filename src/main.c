@@ -275,14 +275,15 @@ static void desenharCenario(HDC hdc) {
 }
 
 static void desenharJogador(HDC hdc) {
-    desenharRetangulo(
-        hdc,
-        jogador.x + (TAMANHO_CELULA - TAMANHO_JOGADOR) / 2,
-        jogador.y + (TAMANHO_CELULA - TAMANHO_JOGADOR) / 2,
-        TAMANHO_JOGADOR,
-        TAMANHO_JOGADOR,
-        RGB(230, 65, 70)
-    );
+    int centroX = jogador.x + TAMANHO_CELULA / 2;
+    int topoY = jogador.y + 6;
+
+    desenharElipse(hdc, centroX - 7, topoY, 14, 14, RGB(245, 190, 140));
+    desenharRetangulo(hdc, centroX - 8, topoY + 15, 16, 18, RGB(230, 65, 70));
+    desenharRetangulo(hdc, centroX - 14, topoY + 18, 6, 14, RGB(245, 190, 140));
+    desenharRetangulo(hdc, centroX + 8, topoY + 18, 6, 14, RGB(245, 190, 140));
+    desenharRetangulo(hdc, centroX - 8, topoY + 33, 6, 9, RGB(30, 80, 140));
+    desenharRetangulo(hdc, centroX + 2, topoY + 33, 6, 9, RGB(30, 80, 140));
 }
 
 static void desenharObstaculos(HDC hdc, ListaObstaculos *lista) {
