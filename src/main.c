@@ -68,26 +68,17 @@ static void moverObstaculos(ListaObstaculos *lista) {
 
 static void removerObstaculosForaDaTela(ListaObstaculos *lista) {
     Obstaculo *atual = lista->inicio;
-    Obstaculo *anterior = NULL;
 
     while (atual != NULL) {
-        int foraDaTela = atual->x < -TAMANHO_CELULA || atual->x > LARGURA_JANELA;
-
-        if (foraDaTela) {
-            Obstaculo *remover = atual;
-
-            if (anterior == NULL) {
-                lista->inicio = atual->proximo;
-            } else {
-                anterior->proximo = atual->proximo;
-            }
-
-            atual = atual->proximo;
-            free(remover);
-        } else {
-            anterior = atual;
-            atual = atual->proximo;
+        if (atual->x < -TAMANHO_CELULA) {
+            atual->x = LARGURA_JANELA + (rand() % 120);
+            atual->y = 280 + (rand() % 4) * TAMANHO_CELULA;
+        } else if (atual->x > LARGURA_JANELA) {
+            atual->x = -TAMANHO_CELULA - (rand() % 120);
+            atual->y = 280 + (rand() % 4) * TAMANHO_CELULA;
         }
+
+        atual = atual->proximo;
     }
 }
 
