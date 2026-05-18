@@ -14,6 +14,7 @@ static int jogoEncerrado = 0;
 static int pontuacaoRegistrada = 0;
 static const char NOME_CLASSE_JANELA[] = "FugaEmBoaViagemWindow";
 
+// comeca a lista sem nenhum tubarao ativo
 static void inicializarListaObstaculos(ListaObstaculos *lista) {
     lista->inicio = NULL;
 }
@@ -22,6 +23,7 @@ static int listaObstaculosVazia(ListaObstaculos *lista) {
     return lista->inicio == NULL;
 }
 
+// cria um no da lista encadeada para representar um tubarao
 static Obstaculo *criarObstaculo(int x, int y, int velocidade, int direcao) {
     Obstaculo *novoObstaculo = (Obstaculo *)malloc(sizeof(Obstaculo));
 
@@ -38,6 +40,7 @@ static Obstaculo *criarObstaculo(int x, int y, int velocidade, int direcao) {
     return novoObstaculo;
 }
 
+// coloca o novo tubarao no final da lista
 static void inserirObstaculo(ListaObstaculos *lista, Obstaculo *novoObstaculo) {
     if (novoObstaculo == NULL) {
         return;
@@ -57,6 +60,7 @@ static void inserirObstaculo(ListaObstaculos *lista, Obstaculo *novoObstaculo) {
     atual->proximo = novoObstaculo;
 }
 
+// percorre a lista para atualizar a posicao de cada tubarao
 static void moverObstaculos(ListaObstaculos *lista) {
     Obstaculo *atual = lista->inicio;
 
@@ -66,6 +70,7 @@ static void moverObstaculos(ListaObstaculos *lista) {
     }
 }
 
+// quando sai da tela o tubarao volta pelo outro lado
 static void removerObstaculosForaDaTela(ListaObstaculos *lista) {
     Obstaculo *atual = lista->inicio;
 
@@ -82,6 +87,7 @@ static void removerObstaculosForaDaTela(ListaObstaculos *lista) {
     }
 }
 
+// cria a quantidade de tubaroes de acordo com o nivel atual
 static void gerarObstaculoSeNecessario(ListaObstaculos *lista, Jogador *jogadorAtual) {
     if (!listaObstaculosVazia(lista)) {
         return;
@@ -116,6 +122,7 @@ static void liberarListaObstaculos(ListaObstaculos *lista) {
     lista->inicio = NULL;
 }
 
+// testa colisao entre o jogador e cada no da lista
 static int verificarColisao(ListaObstaculos *lista, Jogador *jogadorAtual) {
     Obstaculo *atual = lista->inicio;
 
@@ -157,6 +164,7 @@ static void calcularPontuacao(Jogador *jogadorAtual) {
     jogadorAtual->pontuacao += 10;
 }
 
+// ao passar do topo o jogador volta ao inicio com mais dificuldade
 static void avancarNivel(Jogador *jogadorAtual, ListaObstaculos *lista) {
     jogadorAtual->pontuacao += 50;
     atualizarDificuldade(jogadorAtual);
@@ -188,6 +196,7 @@ static int particionarRanking(Pontuacao rankingAtual[], int inicio, int fim) {
     return indiceMenor + 1;
 }
 
+// ordena o ranking da maior pontuacao para a menor
 static void quickSortRanking(Pontuacao rankingAtual[], int inicio, int fim) {
     if (inicio < fim) {
         int indicePivo = particionarRanking(rankingAtual, inicio, fim);
@@ -197,6 +206,7 @@ static void quickSortRanking(Pontuacao rankingAtual[], int inicio, int fim) {
     }
 }
 
+// salva a pontuacao final uma unica vez
 static void registrarPontuacao(Pontuacao rankingAtual[], Jogador *jogadorAtual) {
     if (pontuacaoRegistrada) {
         return;
@@ -477,6 +487,7 @@ static LRESULT CALLBACK processarMensagemJanela(HWND janela, UINT mensagem, WPAR
     return DefWindowProc(janela, mensagem, tecla, parametro);
 }
 
+// ponto de entrada da janela no Windows
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
     (void)hPrevInstance;
     (void)lpCmdLine;
