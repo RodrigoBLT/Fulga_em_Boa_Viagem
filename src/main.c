@@ -342,28 +342,35 @@ static void desenharHud(HDC hdc) {
     desenharTexto(hdc, 620, 62, texto, 18, RGB(20, 70, 90));
 
     if (jogoEncerrado) {
-        desenharTexto(hdc, 300, 260, "Fim de jogo", 36, RGB(160, 20, 30));
-        desenharTexto(hdc, 250, 300, "Pressione R para reiniciar", 20, RGB(160, 20, 30));
-        desenharTexto(hdc, 300, 328, "ou ESC para sair", 18, RGB(160, 20, 30));
+        desenharRetangulo(hdc, 235, 220, 330, 125, RGB(250, 235, 200));
+        desenharRetangulo(hdc, 235, 220, 330, 6, RGB(160, 20, 30));
+        desenharTexto(hdc, 300, 242, "Fim de jogo", 36, RGB(160, 20, 30));
+        desenharTexto(hdc, 268, 292, "R para reiniciar", 20, RGB(20, 70, 90));
+        desenharTexto(hdc, 310, 318, "ESC para sair", 18, RGB(20, 70, 90));
     }
 }
 
 static void exibirRanking(HDC hdc, Pontuacao rankingAtual[], int tamanho) {
     char texto[64];
 
-    desenharTexto(hdc, 318, 365, "Ranking", 22, RGB(20, 70, 90));
+    desenharRetangulo(hdc, 250, 360, 300, 165, RGB(230, 245, 240));
+    desenharRetangulo(hdc, 250, 360, 300, 5, RGB(35, 150, 190));
+    desenharTexto(hdc, 318, 375, "Ranking", 22, RGB(20, 70, 90));
 
     for (int i = 0; i < tamanho; i++) {
         snprintf(texto, sizeof(texto), "%d. %d pontos", i + 1, rankingAtual[i].pontos);
-        desenharTexto(hdc, 305, 395 + i * 24, texto, 18, RGB(20, 70, 90));
+        desenharTexto(hdc, 315, 410 + i * 22, texto, 18, RGB(20, 70, 90));
     }
 }
 
 static void exibirMenu(HDC hdc) {
-    desenharTexto(hdc, 235, 190, "Fuga em Boa Viagem", 34, RGB(20, 70, 90));
-    desenharTexto(hdc, 210, 245, "Atravesse a praia e desvie dos tubaroes", 20, RGB(20, 70, 90));
-    desenharTexto(hdc, 275, 310, "Pressione ENTER para jogar", 20, RGB(160, 20, 30));
-    desenharTexto(hdc, 310, 340, "Use WASD ou setas", 18, RGB(20, 70, 90));
+    desenharRetangulo(hdc, 170, 170, 460, 205, RGB(250, 235, 200));
+    desenharRetangulo(hdc, 170, 170, 460, 7, RGB(35, 150, 190));
+    desenharTexto(hdc, 235, 200, "Fuga em Boa Viagem", 34, RGB(20, 70, 90));
+    desenharTexto(hdc, 222, 254, "Atravesse a praia e desvie dos tubaroes", 19, RGB(20, 70, 90));
+    desenharRetangulo(hdc, 263, 305, 275, 36, RGB(35, 150, 190));
+    desenharTexto(hdc, 285, 313, "ENTER para jogar", 20, RGB(255, 255, 255));
+    desenharTexto(hdc, 318, 350, "WASD ou setas", 18, RGB(20, 70, 90));
 }
 
 static void desenharTelaJogo(HWND janela) {
