@@ -267,11 +267,21 @@ static void desenharCenario(HDC hdc) {
     desenharRetangulo(hdc, 0, 0, LARGURA_JANELA, INICIO_AREIA, RGB(135, 206, 235));
     desenharRetangulo(hdc, 0, INICIO_AREIA, LARGURA_JANELA, INICIO_MAR - INICIO_AREIA, RGB(238, 203, 145));
     desenharRetangulo(hdc, 0, INICIO_MAR, LARGURA_JANELA, ALTURA_JANELA - INICIO_MAR, RGB(35, 150, 190));
+    desenharElipse(hdc, 705, 18, 42, 42, RGB(255, 215, 80));
 
     for (int y = INICIO_AREIA; y < ALTURA_JANELA; y += TAMANHO_CELULA) {
         COLORREF linha = (y < INICIO_MAR) ? RGB(224, 185, 125) : RGB(80, 190, 210);
         desenharRetangulo(hdc, 0, y, LARGURA_JANELA, 2, linha);
     }
+
+    for (int y = INICIO_MAR + 25; y < ALTURA_JANELA; y += 70) {
+        desenharRetangulo(hdc, 0, y, LARGURA_JANELA, 3, RGB(120, 210, 225));
+    }
+
+    desenharRetangulo(hdc, 96, 116, 8, 74, RGB(120, 80, 45));
+    desenharRetangulo(hdc, 62, 92, 76, 42, RGB(250, 230, 120));
+    desenharTexto(hdc, 72, 100, "ALERTA", 14, RGB(120, 40, 30));
+    desenharTexto(hdc, 75, 116, "MAR", 14, RGB(120, 40, 30));
 
     desenharTexto(hdc, 22, 18, "Fuga em Boa Viagem", 26, RGB(20, 70, 90));
     desenharTexto(hdc, 22, 48, "Atravesse a praia e sobreviva aos perigos.", 15, RGB(20, 70, 90));
