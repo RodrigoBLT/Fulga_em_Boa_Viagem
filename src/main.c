@@ -290,13 +290,23 @@ static void desenharCenario(HDC hdc) {
 static void desenharJogador(HDC hdc) {
     int centroX = jogador.x + TAMANHO_CELULA / 2;
     int topoY = jogador.y + 6;
+    POINT cabelo[3] = {
+        {centroX - 9, topoY + 4},
+        {centroX, topoY - 3},
+        {centroX + 9, topoY + 4}
+    };
 
+    desenharElipse(hdc, centroX - 9, topoY - 2, 18, 10, RGB(80, 45, 25));
     desenharElipse(hdc, centroX - 7, topoY, 14, 14, RGB(245, 190, 140));
-    desenharRetangulo(hdc, centroX - 8, topoY + 15, 16, 18, RGB(230, 65, 70));
-    desenharRetangulo(hdc, centroX - 14, topoY + 18, 6, 14, RGB(245, 190, 140));
-    desenharRetangulo(hdc, centroX + 8, topoY + 18, 6, 14, RGB(245, 190, 140));
-    desenharRetangulo(hdc, centroX - 8, topoY + 33, 6, 9, RGB(30, 80, 140));
-    desenharRetangulo(hdc, centroX + 2, topoY + 33, 6, 9, RGB(30, 80, 140));
+    desenharTriangulo(hdc, cabelo, RGB(80, 45, 25));
+    desenharElipse(hdc, centroX - 3, topoY + 6, 2, 2, RGB(30, 30, 30));
+    desenharElipse(hdc, centroX + 3, topoY + 6, 2, 2, RGB(30, 30, 30));
+    desenharRetangulo(hdc, centroX - 9, topoY + 15, 18, 16, RGB(230, 65, 70));
+    desenharRetangulo(hdc, centroX - 11, topoY + 20, 22, 4, RGB(255, 235, 120));
+    desenharRetangulo(hdc, centroX - 15, topoY + 18, 6, 15, RGB(245, 190, 140));
+    desenharRetangulo(hdc, centroX + 9, topoY + 18, 6, 15, RGB(245, 190, 140));
+    desenharRetangulo(hdc, centroX - 8, topoY + 31, 7, 11, RGB(30, 80, 140));
+    desenharRetangulo(hdc, centroX + 1, topoY + 31, 7, 11, RGB(30, 80, 140));
 }
 
 static void desenharObstaculos(HDC hdc, ListaObstaculos *lista) {
@@ -320,11 +330,19 @@ static void desenharObstaculos(HDC hdc, ListaObstaculos *lista) {
             {x + 25, y - 8},
             {x + 31, y + 10}
         };
+        POINT boca[3] = {
+            {olhandoDireita ? x + 35 : x + 5, y + 23},
+            {olhandoDireita ? x + 27 : x + 13, y + 19},
+            {olhandoDireita ? x + 27 : x + 13, y + 27}
+        };
 
         desenharTriangulo(hdc, cauda, RGB(45, 55, 65));
         desenharElipse(hdc, x, y + 8, TAMANHO_CELULA, 24, RGB(45, 55, 65));
         desenharTriangulo(hdc, barbatana, RGB(35, 45, 55));
+        desenharElipse(hdc, x + 9, y + 23, 22, 5, RGB(245, 245, 245));
+        desenharTriangulo(hdc, boca, RGB(210, 40, 45));
         desenharElipse(hdc, olhandoDireita ? x + 29 : x + 8, y + 16, 4, 4, RGB(255, 255, 255));
+        desenharElipse(hdc, olhandoDireita ? x + 31 : x + 10, y + 17, 2, 2, RGB(0, 0, 0));
         atual = atual->proximo;
     }
 }
