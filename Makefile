@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -std=c11
-LDFLAGS = -lgdi32
+LDFLAGS = -lgdi32 -lwinmm -lm
 
 SRC = src/main.c
 OUT = build/fuga-em-bv.exe
