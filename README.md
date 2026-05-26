@@ -4,27 +4,64 @@ Jogo em C inspirado em Crossy Road, ambientado na Praia de Boa Viagem, em Recife
 
 O jogador precisa atravessar a praia e o mar desviando dos tubaroes. Ao chegar ao final da tela, ele volta para o inicio, ganha pontos extras e o nivel de dificuldade aumenta. Com isso, os tubaroes ficam mais rapidos e aparecem em maior quantidade.
 
-## Como executar
+## Dependencias
 
-Requisitos:
+Para compilar e rodar o jogo, e necessario usar Windows com MinGW/GCC instalado.
 
 - Windows
-- GCC/MinGW instalado
+- MinGW com `gcc`
 - `mingw32-make`
 
-Comandos:
+As bibliotecas usadas pelo jogo sao do proprio Windows/MinGW:
+
+- `gdi32`: interface grafica
+- `winmm`: audio/musica
+- `m`: funcoes matematicas
+
+Elas ja sao chamadas no `Makefile`, entao nao precisa instalar nenhuma biblioteca extra alem do MinGW.
+
+Para verificar se o MinGW esta instalado corretamente, rode:
+
+```bash
+gcc --version
+mingw32-make --version
+```
+
+Se algum comando nao for reconhecido, instale o MinGW ou adicione a pasta `bin` do MinGW ao `PATH` do Windows.
+
+## Como executar
+
+No terminal, dentro da pasta do projeto, rode:
 
 ```bash
 mingw32-make
+```
+
+Esse comando compila o jogo e gera o executavel em:
+
+```text
+build/fuga-em-bv.exe
+```
+
+Para compilar e abrir o jogo direto:
+
+```bash
 mingw32-make run
+```
+
+Para limpar os arquivos gerados:
+
+```bash
+mingw32-make clean
 ```
 
 ## Controles
 
 - Enter: iniciar a partida na tela inicial
+- I: abrir a tela de regras
 - Setas ou WASD: mover o jogador
 - R: reiniciar a partida apos o fim de jogo
-- Esc: sair
+- Esc: sair ou voltar da tela de regras
 
 ## Regras principais
 
@@ -53,11 +90,11 @@ Ao final da partida, a pontuacao do jogador e registrada no vetor de ranking. Em
 
 ```text
 .
-├── Makefile
-├── README.md
-└── src
-    ├── jogo.h
-    └── main.c
+|-- Makefile
+|-- README.md
+`-- src
+    |-- jogo.h
+    `-- main.c
 ```
 
 - `src/jogo.h`: constantes e estruturas principais do jogo.
